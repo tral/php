@@ -124,7 +124,6 @@ RUN apt-get download \
         libsqlite3-0 \
         libssh2-1 \
         libssl1.0.0 \
-        libssl1.0.2 \
         libssl1.1 \
         libstdc++6 \
         libsybdb5 \
