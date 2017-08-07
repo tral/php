@@ -192,6 +192,7 @@ RUN apt-get download \
         php7.0-json \
         php7.0-ldap \
         php-libsodium \
+        php-sodium \
         php-libvirt-php \
         php-mailparse \
         php7.0-mbstring \
