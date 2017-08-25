@@ -14,6 +14,7 @@ RUN add-apt-repository -y ppa:ondrej/php && \
 RUN mkdir -p /build/image
 WORKDIR /build
 RUN apt-get download \
+        ca-certificates \
         firebird2.5-common \
         fontconfig \
         fontconfig-config \
@@ -270,6 +271,7 @@ RUN mkdir -p \
     rm -rf \
         etc/X11 \
         etc/apache2 \
+        etc/ca-certificates \
         etc/freetds \
         etc/gss \
         etc/init \
@@ -328,6 +330,7 @@ RUN mkdir -p \
         usr/bin/cpan* \
         usr/lib/x86_64-linux-gnu/perl* \
         usr/share/perl && \
+    cat usr/share/ca-certificates/mozilla/*.crt > etc/ssl/certs/ca-certificates.crt && \
     ln -s php5.6 usr/bin/php && \
     ln -s phar5.6 usr/bin/phar && \
     ln -s phar.phar5.6 usr/bin/phar.phar && \
