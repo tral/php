@@ -288,6 +288,7 @@ RUN mkdir -p \
         usr/lib/php/20151012 \
         usr/lib/php/20160303/*.la \
         usr/lib/php/20160731 \
+        usr/lib/php/20170718 \
         usr/sbin/addgnupghome \
         usr/sbin/applygnupgdefaults \
         usr/sbin/tzconfig \
@@ -327,8 +328,8 @@ RUN mkdir -p \
     for file in etc/php/7.1/mods-available/*.ini; do \
         priority=$(grep -E " *; *priority=" ${file} | sed -r "s/ *; *priority *= *([0-9]+.*)/\1/g"); \
         if [ -z "${priority}" ]; then priority=20; fi; \
-        ln -s "/${file}" etc/php/7.1/cli/conf.d/${priority}-$(basename ${file}) && \
-        ln -s "/${file}" etc/php/7.1/fpm/conf.d/${priority}-$(basename ${file}); \
+        ln -s "../../mods-available/$(basename ${file})" etc/php/7.1/cli/conf.d/${priority}-$(basename ${file}) && \
+        ln -s "../../mods-available/$(basename ${file})" etc/php/7.1/fpm/conf.d/${priority}-$(basename ${file}); \
     done
 
 
