@@ -201,7 +201,6 @@ RUN apt-get download \
         php5.6-intl \
         php5.6-json \
         php5.6-ldap \
-        php-libsodium \
         php-sodium \
         php-libvirt-php \
         php-mailparse \
