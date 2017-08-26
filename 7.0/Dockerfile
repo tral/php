@@ -51,7 +51,6 @@ RUN apt-get download \
         libfreetype6 \
         libgcrypt20 \
         libgd3 \
-        libgdbm3 \
         libgearman8 \
         libgeoip1 \
         libglib2.0-0 \
@@ -103,8 +102,6 @@ RUN apt-get download \
         libpango-1.0-0 \
         libpangocairo-1.0-0 \
         libpangoft2-1.0-0 \
-        libpci3 \
-        libperl5.22 \
         libpgm-5.2-0 \
         libpixman-1-0 \
         libpng12-0 \
@@ -118,9 +115,6 @@ RUN apt-get download \
         librtmp1 \
         libsasl2-2 \
         libsasl2-modules-db \
-        libsensors4 \
-        libsnmp30 \
-        libsnmp-base \
         libsodium18 \
         libsqlite3-0 \
         libssh2-1 \
@@ -141,7 +135,6 @@ RUN apt-get download \
         libwebp5 \
         libwind0-heimdal \
         libwmf0.2-7 \
-        libwrap0 \
         libx11-6 \
         libx11-data \
         libxau6 \
@@ -163,8 +156,6 @@ RUN apt-get download \
         libzmq5 \
         mime-support \
         mlock \
-        perl-base \
-        perl-modules-5.22 \
         php-amqp \
         php-apcu \
         php-apcu-bc \
@@ -215,7 +206,6 @@ RUN apt-get download \
         php7.0-recode \
         php-redis \
         php-rrd \
-        php7.0-snmp \
         php7.0-soap \
         php-solr \
         php7.0-sqlite \
@@ -245,9 +235,7 @@ WORKDIR /build/image
 RUN mkdir -p \
         var/lib/php/sessions \
         var/log \
-        run/php \
-        var/lib/snmp/mib_indexes \
-        etc/snmp && \
+        run/php && \
     chmod 1777 var/lib/php/sessions && \
     mv usr/lib/php/7.0/php.ini-production etc/php/7.0/fpm/php.ini && \
     mv usr/lib/php/7.0/php.ini-production.cli etc/php/7.0/cli/php.ini && \
@@ -278,7 +266,6 @@ RUN mkdir -p \
         usr/lib/aspell/x86_64-linux-gnu/*.la \
         usr/lib/x86_64-linux-gnu/ImageMagick-6.8.9/modules-Q16/coders/*.la \
         usr/lib/x86_64-linux-gnu/ImageMagick-6.8.9/modules-Q16/filters/*.la \
-        usr/lib/x86_64-linux-gnu/perl/debian-config-data-* \
         usr/lib/mime \
         usr/lib/odbc \
         usr/lib/tmpfiles.d \
@@ -305,22 +292,15 @@ RUN mkdir -p \
         usr/share/firebird2.5-common \
         usr/share/gcc-5 \
         usr/share/gdb \
-        usr/share/libsensors4 \
         usr/share/gnupg2/*.txt \
         usr/share/gnupg2/gpg-conf.skel \
-        usr/share/snmp/* \
-        usr/share/php7.0-* \
-        usr/bin/perl* \
-        usr/bin/cpan* \
-        usr/lib/x86_64-linux-gnu/perl* \
-        usr/share/perl && \
+        usr/share/php7.0-* && \
     cat usr/share/ca-certificates/mozilla/*.crt > etc/ssl/certs/ca-certificates.crt && \
     ln -s php7.0 usr/bin/php && \
     ln -s phar7.0 usr/bin/phar && \
     ln -s phar.phar7.0 usr/bin/phar.phar && \
     ln -s php-fpm7.0 usr/sbin/php-fpm && \
     ln -s /dev/stderr var/log/php7.0-fpm.log && \
-    echo "mibs :" > etc/snmp/snmp.conf && \
     sed -i -r \
         's, *listen *= *.*,listen = 9000,g' \
         etc/php/7.0/fpm/pool.d/www.conf && \
