@@ -1,5 +1,5 @@
 ## PHP FPM/CLI docker images
-The image is based on [ppa:ondrej/php](https://launchpad.net/~ondrej/+archive/ubuntu/php) builds and Ubuntu Xenial packages on top of [clover/base](https://hub.docker.com/r/clover/base/).
+The image is based on [ppa:ondrej/php](https://launchpad.net/~ondrej/+archive/ubuntu/php) builds and Ubuntu Xenial packages on top of [clover/common](https://hub.docker.com/r/clover/common/).
 
 All PHP modules are enabled by default at `/etc/php/{7.1,7.0,5.6}/{cli,fpm}/conf.d/`.
 PHP FPM pool is pre-configured in `/etc/php/{7.1,7.0,5.6}/fpm/pool.d/www.conf` to use `www-data` user and group.

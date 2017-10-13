@@ -1,25 +1,37 @@
-#
-# This is a multi-stage build.
-# Actual build is at the very end.
-#
+FROM clover/base AS base
+
+RUN groupadd \
+        --gid 50 \
+        --system \
+        www-data \
+ && useradd \
+        --home-dir /var/www \
+        --no-create-home \
+        --system \
+        --shell /bin/false \
+        --uid 50 \
+        --gid 50 \
+        www-data
 
 FROM library/ubuntu:xenial AS build
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV LANG C.UTF-8
-RUN apt-get update && \
-    apt-get install -y \
+ENV LANG=C.UTF-8
+
+RUN export DEBIAN_FRONTEND=noninteractive \
+ && apt-get update \
+ && apt-get install -y \
         python-software-properties \
         software-properties-common \
         apt-utils
 
-RUN add-apt-repository -y ppa:ondrej/php && \
-    apt-get update
+RUN export DEBIAN_FRONTEND=noninteractive \
+ && add-apt-repository -y ppa:ondrej/php \
+ && add-apt-repository -y ppa:ondrej/pkg-gearman \
+ && apt-get update
 
-RUN mkdir -p /build/image
+RUN mkdir -p /build /rootfs
 WORKDIR /build
 RUN apt-get download \
-        ca-certificates \
         firebird2.5-common \
         fontconfig \
         fontconfig-config \
@@ -31,14 +43,10 @@ RUN apt-get download \
         libasn1-8-heimdal \
         libaspell15 \
         libassuan0 \
-        libaudit1 \
-        libaudit-common \
         libavahi-client3 \
         libavahi-common3 \
         libavahi-common-data \
         libbsd0 \
-        libbz2-1.0 \
-        libc6 \
         libcairo2 \
         libcap-ng0 \
         libc-client2007e \
@@ -46,7 +54,6 @@ RUN apt-get download \
         libcurl3 \
         libcurl3-gnutls \
         libdatrie1 \
-        libdb5.3 \
         libdbi1 \
         libdbus-1-3 \
         libdevmapper1.02.1 \
@@ -59,7 +66,6 @@ RUN apt-get download \
         libfftw3-double3 \
         libfontconfig1 \
         libfreetype6 \
-        libgcc1 \
         libgcrypt20 \
         libgd3 \
         libgearman8 \
@@ -103,38 +109,30 @@ RUN apt-get download \
         libmagickwand-6.q16-2 \
         libmcrypt4 \
         libmemcached11 \
-        libncursesw5 \
         libnettle6 \
         libnl-3-200 \
         libnpth0 \
         libnuma1 \
         libodbc1 \
         libp11-kit0 \
-        libpam0g \
-        libpam-modules \
-        libpam-modules-bin \
         libpango-1.0-0 \
         libpangocairo-1.0-0 \
         libpangoft2-1.0-0 \
-        libpcre3 \
         libpgm-5.2-0 \
         libpixman-1-0 \
         libpng12-0 \
         libpq5 \
         libqdbm14 \
         librabbitmq4 \
-        libreadline6 \
         librecode0 \
         libroken18-heimdal \
         librrd4 \
         librtmp1 \
         libsasl2-2 \
         libsasl2-modules-db \
-        libselinux1 \
         libsodium18 \
         libsqlite3-0 \
         libssh2-1 \
-        libssl1.0.0 \
         libssl1.1 \
         libstdc++6 \
         libsybdb5 \
@@ -144,7 +142,6 @@ RUN apt-get download \
         libthai-data \
         libtidy5 \
         libtiff5 \
-        libtinfo5 \
         libudev1 \
         libuuid1 \
         libvirt0 \
@@ -170,7 +167,6 @@ RUN apt-get download \
         libyaml-0-2 \
         libzip4 \
         libzmq5 \
-        mime-support \
         mlock \
         php-amqp \
         php-apcu \
@@ -242,29 +238,27 @@ RUN apt-get download \
         php-yaml \
         php5.6-zip \
         php-zmq \
-        pinentry-curses \
-        readline-common \
-        tzdata \
-        zlib1g
-RUN for file in *.deb; do dpkg-deb -x ${file} image/; done
+        pinentry-curses
+RUN find *.deb | xargs -I % dpkg-deb -x % /rootfs
 
-WORKDIR /build/image
+WORKDIR /rootfs
 
 RUN mkdir -p \
         var/lib/php/sessions \
         var/log \
+        var/www \
         run/php \
         etc/php/5.6/fpm \
-        etc/php/5.6/cli && \
-    chmod 1777 var/lib/php/sessions && \
-    mv usr/lib/php/5.6/php.ini-production etc/php/5.6/fpm/php.ini && \
-    mv usr/lib/php/5.6/php.ini-production.cli etc/php/5.6/cli/php.ini && \
-    mv usr/share/php5.6-*/*/*.ini etc/php/5.6/mods-available && \
-    rm -rf \
+        etc/php/5.6/cli \
+ && chmod 1777 var/lib/php/sessions \
+ && mv usr/lib/php/5.6/php.ini-production etc/php/5.6/fpm/php.ini \
+ && mv usr/lib/php/5.6/php.ini-production.cli etc/php/5.6/cli/php.ini \
+ && mv usr/share/php5.6-*/*/*.ini etc/php/5.6/mods-available \
+ && rm -rf \
         etc/X11 \
         etc/apache2 \
-        etc/ca-certificates \
         etc/freetds \
+        etc/fonts/conf.d/README \
         etc/gss \
         etc/init \
         etc/init.d \
@@ -273,20 +267,12 @@ RUN mkdir -p \
         etc/php/7.0 \
         etc/php/7.1 \
         etc/php/7.2 \
-        etc/mailcap.order \
         lib/systemd \
         lib/udev \
-        usr/bin/cautious-launcher \
-        usr/bin/compose \
-        usr/bin/edit \
-        usr/bin/print \
-        usr/bin/run-mailcap \
-        usr/bin/see \
         usr/include \
         usr/lib/aspell/x86_64-linux-gnu/*.la \
         usr/lib/x86_64-linux-gnu/ImageMagick-6.8.9/modules-Q16/coders/*.la \
         usr/lib/x86_64-linux-gnu/ImageMagick-6.8.9/modules-Q16/filters/*.la \
-        usr/lib/mime \
         usr/lib/odbc \
         usr/lib/tmpfiles.d \
         usr/lib/php/5.6 \
@@ -299,9 +285,8 @@ RUN mkdir -p \
         usr/lib/php/20170718 \
         usr/sbin/addgnupghome \
         usr/sbin/applygnupgdefaults \
-        usr/sbin/tzconfig \
-        usr/sbin/update-mime \
         usr/share/doc \
+        usr/share/gcc-5 \
         usr/share/man \
         usr/share/info \
         usr/share/apport \
@@ -310,36 +295,59 @@ RUN mkdir -p \
         usr/share/lintian \
         usr/share/upstart \
         usr/share/firebird2.5-common \
-        usr/share/gcc-5 \
         usr/share/gdb \
         usr/share/gnupg2/*.txt \
         usr/share/gnupg2/gpg-conf.skel \
-        usr/share/php5.6-* && \
-    cat usr/share/ca-certificates/mozilla/*.crt > etc/ssl/certs/ca-certificates.crt && \
-    ln -s php5.6 usr/bin/php && \
-    ln -s phar5.6 usr/bin/phar && \
-    ln -s phar.phar5.6 usr/bin/phar.phar && \
-    ln -s php-fpm5.6 usr/sbin/php-fpm && \
-    ln -s /dev/stderr var/log/php5.6-fpm.log && \
-    sed -i -r \
+        usr/share/php5.6-* \
+ && ln -s php5.6 usr/bin/php \
+ && ln -s phar5.6 usr/bin/phar \
+ && ln -s phar.phar5.6 usr/bin/phar.phar \
+ && ln -s php-fpm5.6 usr/sbin/php-fpm \
+ && ln -s /dev/stderr var/log/php5.6-fpm.log \
+ && sed -i -r \
         's, *listen *= *.*,listen = 9000,g' \
-        etc/php/5.6/fpm/pool.d/www.conf && \
-    sed -i -r \
+        etc/php/5.6/fpm/pool.d/www.conf \
+ && sed -i -r \
         's,[ ;]*systemd_interval *= *.*,systemd_interval = 0,g' \
-        etc/php/5.6/fpm/php-fpm.conf && \
-    for file in etc/php/5.6/mods-available/*.ini; do \
+        etc/php/5.6/fpm/php-fpm.conf \
+ && sed -i -r \
+        -e 's,[ ;]*openssl[.]cafile *= *.*,openssl.cafile = /etc/ssl/certs/ca-certificates.crt,g' \
+        -e 's,[ ;]*openssl[.]capath *= *.*,openssl.capath = /usr/share/ca-certificates/mozilla,g' \
+        etc/php/5.6/fpm/php.ini \
+ && sed -i -r \
+        -e 's,[ ;]*openssl[.]cafile *= *.*,openssl.cafile = /etc/ssl/certs/ca-certificates.crt,g' \
+        -e 's,[ ;]*openssl[.]capath *= *.*,openssl.capath = /usr/share/ca-certificates/mozilla,g' \
+        etc/php/5.6/cli/php.ini \
+ && for file in etc/php/5.6/mods-available/*.ini; do \
         priority=$(grep -E " *; *priority=" ${file} | sed -r "s/ *; *priority *= *([0-9]+.*)/\1/g"); \
         if [ -z "${priority}" ]; then priority=20; fi; \
-        ln -s "../../mods-available/$(basename ${file})" etc/php/5.6/cli/conf.d/${priority}-$(basename ${file}) && \
+        ln -s "../../mods-available/$(basename ${file})" etc/php/5.6/cli/conf.d/${priority}-$(basename ${file}); \
         ln -s "../../mods-available/$(basename ${file})" etc/php/5.6/fpm/conf.d/${priority}-$(basename ${file}); \
-    done
+    done \
+ && find \
+        etc/firebird/2.5/firebird.conf \
+        etc/ldap/ldap.conf \
+        etc/libnl-3/* \
+        etc/magic* \
+        usr/share/avahi/service-types \
+    | xargs -I % sed -i -r \
+        -e 's,^[[:space:]]*[#;]+.*$,,g' \
+        -e 's,[[:space:]]+, ,g' \
+        -e '/^[[:space:]]*$/d' \
+        %
 
-
-FROM clover/base
+COPY --from=base /etc/group /etc/gshadow /etc/passwd /etc/shadow etc/
+COPY init.sh etc/
 
 WORKDIR /
-COPY --from=build /build/image /
 
-CMD ["php-fpm", "-F"]
+
+FROM clover/common
+
+ENV LANG=C.UTF-8
+
+COPY --from=build /rootfs /
+
+CMD ["sh", "/etc/init.sh"]
 
 EXPOSE 9000
