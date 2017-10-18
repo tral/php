@@ -13,6 +13,6 @@ else
     test $(id -g "$PUSER") -eq $PGID || usermod --gid $PGID "$PUSER" || exit 2
 fi
 
-test -z "${PCHOWN+1}" || chown $PUID:$PGID -R /var/lib/php/sessions /var/www || exit 2
+chown $PUID:$PGID /var/lib/php/sessions /var/www || exit 2
 
 php-fpm -F
