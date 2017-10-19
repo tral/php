@@ -305,7 +305,9 @@ RUN mkdir -p \
  && ln -s php-fpm5.6 usr/sbin/php-fpm \
  && ln -s /dev/stderr var/log/php5.6-fpm.log \
  && sed -i -r \
-        's, *listen *= *.*,listen = 9000,g' \
+        -e 's, *listen *= *.*,listen = 9000,g' \
+        -e 's, *user *= *.*,user = www,g' \
+        -e 's, *group *= *.*,group = www,g' \
         etc/php/5.6/fpm/pool.d/www.conf \
  && sed -i -r \
         's,[ ;]*systemd_interval *= *.*,systemd_interval = 0,g' \

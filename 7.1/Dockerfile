@@ -300,7 +300,9 @@ RUN mkdir -p \
  && ln -s php-fpm7.1 usr/sbin/php-fpm \
  && ln -s /dev/stderr var/log/php7.1-fpm.log \
  && sed -i -r \
-        's, *listen *= *.*,listen = 9000,g' \
+        -e 's, *listen *= *.*,listen = 9000,g' \
+        -e 's, *user *= *.*,user = www,g' \
+        -e 's, *group *= *.*,group = www,g' \
         etc/php/7.1/fpm/pool.d/www.conf \
  && sed -i -r \
         's,[ ;]*systemd_interval *= *.*,systemd_interval = 0,g' \
