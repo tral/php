@@ -3,7 +3,7 @@ FROM clover/base AS base
 RUN groupadd \
         --gid 50 \
         --system \
-        www-data \
+        www \
  && useradd \
         --home-dir /var/www \
         --no-create-home \
@@ -11,7 +11,7 @@ RUN groupadd \
         --shell /bin/false \
         --uid 50 \
         --gid 50 \
-        www-data
+        www
 
 FROM library/ubuntu:xenial AS build
 
