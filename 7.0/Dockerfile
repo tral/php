@@ -303,6 +303,8 @@ RUN mkdir -p \
         -e 's, *listen *= *.*,listen = 9000,g' \
         -e 's, *user *= *.*,user = www,g' \
         -e 's, *group *= *.*,group = www,g' \
+        -e 's, *listen\.owner *= *.*,listen.owner = www,g' \
+        -e 's, *listen\.group *= *.*,listen.group = www,g' \
         etc/php/7.0/fpm/pool.d/www.conf \
  && sed -i -r \
         's,[ ;]*systemd_interval *= *.*,systemd_interval = 0,g' \
