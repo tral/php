@@ -40,6 +40,7 @@ RUN apt-get download \
         gnupg-agent \
         imagemagick-common \
         libapparmor1 \
+        libargon2-0 \
         libasn1-8-heimdal \
         libaspell15 \
         libassuan0 \
@@ -107,7 +108,6 @@ RUN apt-get download \
         libmagic1 \
         libmagickcore-6.q16-2 \
         libmagickwand-6.q16-2 \
-        libmcrypt4 \
         libmemcached11 \
         libnettle6 \
         libnl-3-200 \
@@ -174,69 +174,68 @@ RUN apt-get download \
         php-apcu \
         php-apcu-bc \
         php-ast \
-        php7.1-bcmath \
-        php7.1-bz2 \
-        php7.1-cli \
-        php7.1-common \
-        php7.1-curl \
-        php7.1-dba \
+        php7.2-bcmath \
+        php7.2-bz2 \
+        php7.2-cli \
+        php7.2-common \
+        php7.2-curl \
+        php7.2-dba \
         php-ds \
-        php7.1-enchant \
-        php7.1-fpm \
-        php7.1-gd \
+        php7.2-enchant \
+        php7.2-fpm \
+        php7.2-gd \
         php-gearman \
         php-geoip \
         php-gmagick \
-        php7.1-gmp \
+        php7.2-gmp \
         php-gnupg \
         php-http \
         php-igbinary \
         php-imagick \
-        php7.1-imap \
-        php7.1-interbase \
-        php7.1-intl \
-        php7.1-json \
-        php7.1-ldap \
+        php7.2-imap \
+        php7.2-interbase \
+        php7.2-intl \
+        php7.2-json \
+        php7.2-ldap \
         php-sodium \
         php-libvirt-php \
         php-mailparse \
-        php7.1-mbstring \
-        php7.1-mcrypt \
+        php7.2-mbstring \
         php-memcache \
         php-memcached \
         php-mongodb \
         php-msgpack \
-        php7.1-mysql \
+        php7.2-mysql \
         php-oauth \
-        php7.1-odbc \
-        php7.1-opcache \
-        php7.1-pgsql \
+        php7.2-odbc \
+        php7.2-opcache \
+        php7.2-pgsql \
         php-phalcon \
         php-propro \
-        php7.1-pspell \
+        php7.2-pspell \
         php-radius \
         php-raphf \
-        php7.1-readline \
-        php7.1-recode \
+        php7.2-readline \
+        php7.2-recode \
         php-redis \
         php-rrd \
-        php7.1-soap \
+        php7.2-soap \
         php-solr \
-        php7.1-sqlite \
-        php7.1-sqlite3 \
+        php7.2-sqlite \
+        php7.2-sqlite3 \
         php-ssh2 \
         php-stomp \
-        php7.1-sybase \
+        php7.2-sybase \
         php-tideways \
-        php7.1-tidy \
+        php7.2-tidy \
         php-uuid \
         php-xdebug \
-        php7.1-xml \
-        php7.1-xmlrpc \
-        php7.1-xsl \
+        php7.2-xml \
+        php7.2-xmlrpc \
+        php7.2-xsl \
         php-yac \
         php-yaml \
-        php7.1-zip \
+        php7.2-zip \
         php-zmq
 RUN find *.deb | xargs -I % dpkg-deb -x % /rootfs
 
@@ -248,9 +247,9 @@ RUN mkdir -p \
         var/www \
         run/php \
  && chmod 1777 var/lib/php/sessions \
- && mv usr/lib/php/7.1/php.ini-production etc/php/7.1/fpm/php.ini \
- && mv usr/lib/php/7.1/php.ini-production.cli etc/php/7.1/cli/php.ini \
- && mv usr/share/php7.1-*/*/*.ini etc/php/7.1/mods-available \
+ && mv usr/lib/php/7.2/php.ini-production etc/php/7.2/fpm/php.ini \
+ && mv usr/lib/php/7.2/php.ini-production.cli etc/php/7.2/cli/php.ini \
+ && mv usr/share/php7.2-*/*/*.ini etc/php/7.2/mods-available \
  && rm -rf \
         etc/X11 \
         etc/apache2 \
@@ -263,7 +262,7 @@ RUN mkdir -p \
         etc/php/5.5 \
         etc/php/5.6 \
         etc/php/7.0 \
-        etc/php/7.2 \
+        etc/php/7.1 \
         lib/systemd \
         lib/udev \
         usr/include \
@@ -272,14 +271,14 @@ RUN mkdir -p \
         usr/lib/x86_64-linux-gnu/ImageMagick-6.8.9/modules-Q16/filters/*.la \
         usr/lib/odbc \
         usr/lib/tmpfiles.d \
-        usr/lib/php/7.1 \
-        usr/lib/php/php7.1-fpm-reopenlogs \
+        usr/lib/php/7.2 \
+        usr/lib/php/php7.2-fpm-reopenlogs \
         usr/lib/php/20121212 \
         usr/lib/php/20131226 \
         usr/lib/php/20151012 \
-        usr/lib/php/20160303/*.la \
+        usr/lib/php/20160303 \
         usr/lib/php/20160731 \
-        usr/lib/php/20170718 \
+        usr/lib/php/20170718/*.la \
         usr/sbin/addgnupghome \
         usr/sbin/applygnupgdefaults \
         usr/share/doc \
@@ -295,35 +294,35 @@ RUN mkdir -p \
         usr/share/gdb \
         usr/share/gnupg2/*.txt \
         usr/share/gnupg2/gpg-conf.skel \
-        usr/share/php7.1-* \
- && ln -s php7.1 usr/bin/php \
- && ln -s phar7.1 usr/bin/phar \
- && ln -s phar.phar7.1 usr/bin/phar.phar \
- && ln -s php-fpm7.1 usr/sbin/php-fpm \
- && ln -s /dev/stderr var/log/php7.1-fpm.log \
+        usr/share/php7.2-* \
+ && ln -s php7.2 usr/bin/php \
+ && ln -s phar7.2 usr/bin/phar \
+ && ln -s phar.phar7.2 usr/bin/phar.phar \
+ && ln -s php-fpm7.2 usr/sbin/php-fpm \
+ && ln -s /dev/stderr var/log/php7.2-fpm.log \
  && sed -i -r \
         -e 's, *listen *= *.*,listen = 9000,g' \
         -e 's, *user *= *.*,user = www,g' \
         -e 's, *group *= *.*,group = www,g' \
         -e 's, *listen\.owner *= *.*,listen.owner = www,g' \
         -e 's, *listen\.group *= *.*,listen.group = www,g' \
-        etc/php/7.1/fpm/pool.d/www.conf \
+        etc/php/7.2/fpm/pool.d/www.conf \
  && sed -i -r \
         's,[ ;]*systemd_interval *= *.*,systemd_interval = 0,g' \
-        etc/php/7.1/fpm/php-fpm.conf \
+        etc/php/7.2/fpm/php-fpm.conf \
  && sed -i -r \
         -e 's,[ ;]*openssl[.]cafile *= *.*,openssl.cafile = /etc/ssl/certs/ca-certificates.crt,g' \
         -e 's,[ ;]*openssl[.]capath *= *.*,openssl.capath = /usr/share/ca-certificates/mozilla,g' \
-        etc/php/7.1/fpm/php.ini \
+        etc/php/7.2/fpm/php.ini \
  && sed -i -r \
         -e 's,[ ;]*openssl[.]cafile *= *.*,openssl.cafile = /etc/ssl/certs/ca-certificates.crt,g' \
         -e 's,[ ;]*openssl[.]capath *= *.*,openssl.capath = /usr/share/ca-certificates/mozilla,g' \
-        etc/php/7.1/cli/php.ini \
- && for file in etc/php/7.1/mods-available/*.ini; do \
+        etc/php/7.2/cli/php.ini \
+ && for file in etc/php/7.2/mods-available/*.ini; do \
         priority=$(grep -E " *; *priority=" ${file} | sed -r "s/ *; *priority *= *([0-9]+.*)/\1/g"); \
         if [ -z "${priority}" ]; then priority=20; fi; \
-        ln -s "../../mods-available/$(basename ${file})" etc/php/7.1/cli/conf.d/${priority}-$(basename ${file}); \
-        ln -s "../../mods-available/$(basename ${file})" etc/php/7.1/fpm/conf.d/${priority}-$(basename ${file}); \
+        ln -s "../../mods-available/$(basename ${file})" etc/php/7.2/cli/conf.d/${priority}-$(basename ${file}); \
+        ln -s "../../mods-available/$(basename ${file})" etc/php/7.2/fpm/conf.d/${priority}-$(basename ${file}); \
     done \
  && find \
         etc/firebird/2.5/firebird.conf \

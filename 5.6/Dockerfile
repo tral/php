@@ -145,7 +145,8 @@ RUN apt-get download \
         libudev1 \
         libuuid1 \
         libvirt0 \
-        libwebp5 \
+        libwebp6 \
+        libwebpmux3 \
         libwind0-heimdal \
         libwmf0.2-7 \
         libx11-6 \
@@ -165,7 +166,7 @@ RUN apt-get download \
         libxslt1.1 \
         libyajl2 \
         libyaml-0-2 \
-        libzip4 \
+        libzip5 \
         libzmq5 \
         mlock \
         php-amqp \
