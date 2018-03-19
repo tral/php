@@ -194,6 +194,8 @@ RUN apt-get download \
         php5.6-intl \
         php5.6-json \
         php5.6-ldap \
+        php-lua \
+        liblua5.2-0 \
         php-sodium \
         php-libvirt-php \
         php-mailparse \
@@ -218,6 +220,8 @@ RUN apt-get download \
         php5.6-recode \
         php-redis \
         php-rrd \
+        php-sass \
+        libsass0 \
         php5.6-soap \
         php-solr \
         php5.6-sqlite \

@@ -197,6 +197,8 @@ RUN apt-get download \
         php7.1-intl \
         php7.1-json \
         php7.1-ldap \
+        php-lua \
+        liblua5.2-0 \
         php-sodium \
         php-libvirt-php \
         php-mailparse \
@@ -220,6 +222,8 @@ RUN apt-get download \
         php7.1-recode \
         php-redis \
         php-rrd \
+        php-sass \
+        libsass0 \
         php7.1-soap \
         php-solr \
         php7.1-sqlite \
@@ -229,6 +233,7 @@ RUN apt-get download \
         php7.1-sybase \
         php-tideways \
         php7.1-tidy \
+        php-uploadprogress \
         php-uuid \
         php-xdebug \
         php7.1-xml \
