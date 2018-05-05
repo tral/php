@@ -169,6 +169,7 @@ RUN apt-get download \
         libyaml-0-2 \
         libzip5 \
         libzmq5 \
+        libnorm1 \
         mlock \
         php-amqp \
         php-apcu \
