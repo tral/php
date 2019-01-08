@@ -13,32 +13,31 @@ RUN groupadd \
         --gid 50 \
         www
 
-FROM library/ubuntu:xenial AS build
+FROM library/ubuntu:bionic AS build
 
 ENV LANG=C.UTF-8
 
 RUN export DEBIAN_FRONTEND=noninteractive \
  && apt-get update \
  && apt-get install -y \
-        python-software-properties \
+        python3-software-properties \
         software-properties-common \
         apt-utils
 
 RUN export DEBIAN_FRONTEND=noninteractive \
  && add-apt-repository -y ppa:ondrej/php \
- && add-apt-repository -y ppa:ondrej/pkg-gearman \
  && apt-get update
 
 RUN mkdir -p /build /rootfs
 WORKDIR /build
 RUN apt-get download \
-        firebird2.5-common \
+        firebird3.0-common \
         fontconfig \
         fontconfig-config \
         freetds-common \
         gnupg2 \
         gnupg-agent \
-        imagemagick-common \
+        imagemagick-6-common \
         libapparmor1 \
         libasn1-8-heimdal \
         libaspell15 \
@@ -46,20 +45,23 @@ RUN apt-get download \
         libavahi-client3 \
         libavahi-common3 \
         libavahi-common-data \
+        libacl1 \
+        libattr1 \
         libbsd0 \
         libcairo2 \
         libcap-ng0 \
         libc-client2007e \
-        libcomerr2 \
+        libcom-err2 \
         libcurl3 \
         libcurl3-gnutls \
+        libcurl4 \
         libdatrie1 \
         libdbi1 \
         libdbus-1-3 \
         libdevmapper1.02.1 \
         libedit2 \
         libenchant1c2a \
-        libevent-2.0-5 \
+        libevent-2.1-6 \
         libexpat1 \
         libfbclient2 \
         libffi6 \
@@ -85,11 +87,11 @@ RUN apt-get download \
         libheimbase1-heimdal \
         libheimntlm0-heimdal \
         libhogweed4 \
-        libhunspell-1.3-0 \
+        libhunspell-1.6-0 \
         libhx509-5-heimdal \
-        libicu55 \
+        libicu60 \
         libidn11 \
-        libjasper1 \
+        libidn2-0 \
         libjbig0 \
         libjpeg8 \
         libjpeg-turbo8 \
@@ -103,14 +105,20 @@ RUN apt-get download \
         libldap-2.4-2 \
         liblqr-1-0 \
         libltdl7 \
+        liblmdb0 \
         liblzma5 \
+        liblz4-1 \
         libmagic1 \
-        libmagickcore-6.q16-2 \
-        libmagickwand-6.q16-2 \
+        libmagic-mgc \
+        libmagickcore-6.q16-3 \
+        libmagickcore-6.q16-3-extra \
+        libmagickwand-6.q16-3 \
         libmcrypt4 \
         libmemcached11 \
         libnettle6 \
         libnl-3-200 \
+        libnghttp2-14 \
+        libtommath1 \
         libnpth0 \
         libnuma1 \
         libodbc1 \
@@ -120,17 +128,17 @@ RUN apt-get download \
         libpangoft2-1.0-0 \
         libpgm-5.2-0 \
         libpixman-1-0 \
-        libpng12-0 \
+        libpng16-16 \
         libpq5 \
+        libpsl5 \
         libqdbm14 \
         librabbitmq4 \
         librecode0 \
         libroken18-heimdal \
-        librrd4 \
+        librrd8 \
         librtmp1 \
         libsasl2-2 \
         libsasl2-modules-db \
-        libsodium18 \
         libsodium23 \
         libsqlite3-0 \
         libssh2-1 \
@@ -141,10 +149,11 @@ RUN apt-get download \
         libtasn1-6 \
         libthai0 \
         libthai-data \
-        libtidy5 \
+        libtidy5deb1 \
         libtiff5 \
         libudev1 \
         libuuid1 \
+        libunistring2 \
         libvirt0 \
         libwebp6 \
         libwebpmux3 \
@@ -157,7 +166,7 @@ RUN apt-get download \
         libxcb-render0 \
         libxcb-shm0 \
         libxdmcp6 \
-        libxen-4.6 \
+        libxen-4.9 \
         libxenstore3.0 \
         libxext6 \
         libxml2 \
@@ -167,7 +176,7 @@ RUN apt-get download \
         libxslt1.1 \
         libyajl2 \
         libyaml-0-2 \
-        libzip5 \
+        libzip4 \
         libzmq5 \
         libnorm1 \
         mlock \
@@ -270,12 +279,14 @@ RUN mkdir -p \
         etc/php/5.6 \
         etc/php/7.1 \
         etc/php/7.2 \
+        etc/php/7.3 \
         lib/systemd \
         lib/udev \
+        usr/bin/gpg2 \
         usr/include \
         usr/lib/aspell/x86_64-linux-gnu/*.la \
-        usr/lib/x86_64-linux-gnu/ImageMagick-6.8.9/modules-Q16/coders/*.la \
-        usr/lib/x86_64-linux-gnu/ImageMagick-6.8.9/modules-Q16/filters/*.la \
+        usr/lib/x86_64-linux-gnu/ImageMagick-6.9.7/modules-Q16/coders/*.la \
+        usr/lib/x86_64-linux-gnu/ImageMagick-6.9.7/modules-Q16/filters/*.la \
         usr/lib/odbc \
         usr/lib/tmpfiles.d \
         usr/lib/php/7.0 \
@@ -286,8 +297,10 @@ RUN mkdir -p \
         usr/lib/php/20160303 \
         usr/lib/php/20160731 \
         usr/lib/php/20170718 \
+        usr/lib/php/20180731 \
         usr/sbin/addgnupghome \
         usr/sbin/applygnupgdefaults \
+        usr/share/X11/locale \
         usr/share/doc \
         usr/share/man \
         usr/share/info \
@@ -296,8 +309,8 @@ RUN mkdir -p \
         usr/share/doc-base \
         usr/share/lintian \
         usr/share/upstart \
-        usr/share/firebird2.5-common \
-        usr/share/gcc-5 \
+        usr/share/firebird3.0-common \
+        usr/share/gcc-8 \
         usr/share/gdb \
         usr/share/gnupg2/*.txt \
         usr/share/gnupg2/gpg-conf.skel \
@@ -332,11 +345,9 @@ RUN mkdir -p \
         ln -s "../../mods-available/$(basename ${file})" etc/php/7.0/fpm/conf.d/${priority}-$(basename ${file}); \
     done \
  && find \
-        etc/firebird/2.5/firebird.conf \
-        etc/ldap/ldap.conf \
+        etc/firebird/3.0/firebird.conf \
         etc/libnl-3/* \
         etc/magic* \
-        usr/share/avahi/service-types \
     | xargs -I % sed -i -r \
         -e 's,^[[:space:]]*[#;]+.*$,,g' \
         -e 's,[[:space:]]+, ,g' \

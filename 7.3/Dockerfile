@@ -20,9 +20,9 @@ ENV LANG=C.UTF-8
 RUN export DEBIAN_FRONTEND=noninteractive \
  && apt-get update \
  && apt-get install -y \
-        python3-software-properties \
-        software-properties-common \
-        apt-utils
+         python3-software-properties \
+         software-properties-common \
+         apt-utils
 
 RUN export DEBIAN_FRONTEND=noninteractive \
  && add-apt-repository -y ppa:ondrej/php \
@@ -39,6 +39,7 @@ RUN apt-get download \
         gnupg-agent \
         imagemagick-6-common \
         libapparmor1 \
+        libargon2-0 \
         libasn1-8-heimdal \
         libaspell15 \
         libassuan0 \
@@ -61,8 +62,7 @@ RUN apt-get download \
         libdevmapper1.02.1 \
         libedit2 \
         libenchant1c2a \
-        libevent-1.4-2 \
-#        libevent-2.1-6 \
+        libevent-2.1-6 \
         libexpat1 \
         libfbclient2 \
         libffi6 \
@@ -114,7 +114,6 @@ RUN apt-get download \
         libmagickcore-6.q16-3 \
         libmagickcore-6.q16-3-extra \
         libmagickwand-6.q16-3 \
-        libmcrypt4 \
         libmemcached11 \
         libnettle6 \
         libnl-3-200 \
@@ -123,6 +122,7 @@ RUN apt-get download \
         libnpth0 \
         libnuma1 \
         libodbc1 \
+        libpcre2-8-0 \
         libp11-kit0 \
         libpango-1.0-0 \
         libpangocairo-1.0-0 \
@@ -183,79 +183,76 @@ RUN apt-get download \
         mlock \
         php-amqp \
         php-apcu \
-        php5.6-bcmath \
-        php5.6-bz2 \
-        php5.6-cli \
-        php5.6-common \
-        php5.6-curl \
-        php5.6-dba \
-        php5.6-enchant \
-        php5.6-fpm \
-        php5.6-gd \
+        php-apcu-bc \
+        php-ast \
+        php7.3-bcmath \
+        php7.3-bz2 \
+        php7.3-cli \
+        php7.3-common \
+        php7.3-curl \
+        php7.3-dba \
+        php-ds \
+        php7.3-enchant \
+        php7.3-fpm \
+        php7.3-gd \
         php-gearman \
         php-geoip \
-        php-gettext \
         php-gmagick \
-        php5.6-gmp \
+        php7.3-gmp \
         php-gnupg \
-#        php-http \
+        php-http \
         php-igbinary \
         php-imagick \
-        php5.6-imap \
-        php5.6-interbase \
-        php5.6-intl \
-        php5.6-json \
-        php5.6-ldap \
-        php-lua \
-        liblua5.2-0 \
+        php7.3-imap \
+        php7.3-interbase \
+        php7.3-intl \
+        php7.3-json \
+        php7.3-ldap \
+#        php-lua \
+#        liblua5.2-0 \
         php-sodium \
         php-libvirt-php \
         php-mailparse \
-        php5.6-mbstring \
-        php5.6-mcrypt \
+        php7.3-mbstring \
         php-memcache \
         php-memcached \
-        php-mongo \
         php-mongodb \
         php-msgpack \
-        php5.6-mysql \
+        php7.3-mysql \
         php-oauth \
-        php5.6-odbc \
-        php5.6-opcache \
-        php-pgsql \
+        php7.3-odbc \
+        php7.3-opcache \
+        php7.3-pgsql \
         php-phalcon \
         php-propro \
-        php5.6-pspell \
+        php7.3-pspell \
         php-radius \
         php-raphf \
-        php5.6-readline \
-        php5.6-recode \
+        php7.3-readline \
+        php7.3-recode \
         php-redis \
         php-rrd \
         php-sass \
         libsass0 \
-        php5.6-soap \
+        php7.3-soap \
         php-solr \
-        php5.6-sqlite \
-        php5.6-sqlite3 \
+        php7.3-sqlite \
+        php7.3-sqlite3 \
         php-ssh2 \
         php-stomp \
-        php5.6-sybase \
+        php7.3-sybase \
         php-tideways \
-        php5.6-tidy \
+        php7.3-tidy \
         php-uploadprogress \
         php-uuid \
-        php-xcache \
         php-xdebug \
-        php-xhprof \
-        php5.6-xml \
-        php5.6-xmlrpc \
-        php5.6-xsl \
+        php7.3-xml \
+        php7.3-xmlrpc \
+        php7.3-xsl \
         php-yac \
         php-yaml \
-        php5.6-zip \
-        php-zmq \
-        pinentry-curses
+        php7.3-zip \
+        php-zmq
 RUN find *.deb | xargs -I % dpkg-deb -x % /rootfs
 
 WORKDIR /rootfs
@@ -265,12 +262,10 @@ RUN mkdir -p \
         var/log \
         var/www \
         run/php \
-        etc/php/5.6/fpm \
-        etc/php/5.6/cli \
  && chmod 1777 var/lib/php/sessions \
- && mv usr/lib/php/5.6/php.ini-production etc/php/5.6/fpm/php.ini \
- && mv usr/lib/php/5.6/php.ini-production.cli etc/php/5.6/cli/php.ini \
- && mv usr/share/php5.6-*/*/*.ini etc/php/5.6/mods-available \
+ && mv usr/lib/php/7.3/php.ini-production etc/php/7.3/fpm/php.ini \
+ && mv usr/lib/php/7.3/php.ini-production.cli etc/php/7.3/cli/php.ini \
+ && mv usr/share/php7.3-*/*/*.ini etc/php/7.3/mods-available \
  && rm -rf \
         etc/X11 \
         etc/apache2 \
@@ -281,10 +276,10 @@ RUN mkdir -p \
         etc/init.d \
         etc/logrotate.d \
         etc/php/5.5 \
+        etc/php/5.6 \
         etc/php/7.0 \
         etc/php/7.1 \
         etc/php/7.2 \
-        etc/php/7.3 \
         lib/systemd \
         lib/udev \
         usr/bin/gpg2 \
@@ -294,20 +289,19 @@ RUN mkdir -p \
         usr/lib/x86_64-linux-gnu/ImageMagick-6.9.7/modules-Q16/filters/*.la \
         usr/lib/odbc \
         usr/lib/tmpfiles.d \
-        usr/lib/php/5.6 \
-        usr/lib/php/php5.6-fpm-reopenlogs \
+        usr/lib/php/7.3 \
+        usr/lib/php/php7.3-fpm-reopenlogs \
         usr/lib/php/20121212 \
-        usr/lib/php/20131226/*.la \
+        usr/lib/php/20131226 \
         usr/lib/php/20151012 \
         usr/lib/php/20160303 \
         usr/lib/php/20160731 \
         usr/lib/php/20170718 \
-        usr/lib/php/20180731 \
+        usr/lib/php/20180731/*.la \
         usr/sbin/addgnupghome \
         usr/sbin/applygnupgdefaults \
         usr/share/X11/locale \
         usr/share/doc \
-        usr/share/gcc-8 \
         usr/share/man \
         usr/share/info \
         usr/share/apport \
@@ -316,39 +310,39 @@ RUN mkdir -p \
         usr/share/lintian \
         usr/share/upstart \
         usr/share/firebird3.0-common \
+        usr/share/gcc-8 \
         usr/share/gdb \
         usr/share/gnupg2/*.txt \
         usr/share/gnupg2/gpg-conf.skel \
-        usr/share/php5.6-* \
-        usr/share/php/php-gettext \
- && ln -s php5.6 usr/bin/php \
- && ln -s phar5.6 usr/bin/phar \
- && ln -s phar.phar5.6 usr/bin/phar.phar \
- && ln -s php-fpm5.6 usr/sbin/php-fpm \
- && ln -s /dev/stderr var/log/php5.6-fpm.log \
+        usr/share/php7.3-* \
+ && ln -s php7.3 usr/bin/php \
+ && ln -s phar7.3 usr/bin/phar \
+ && ln -s phar.phar7.3 usr/bin/phar.phar \
+ && ln -s php-fpm7.3 usr/sbin/php-fpm \
+ && ln -s /dev/stderr var/log/php7.3-fpm.log \
  && sed -i -r \
         -e 's, *listen *= *.*,listen = 9000,g' \
         -e 's, *user *= *.*,user = www,g' \
         -e 's, *group *= *.*,group = www,g' \
         -e 's, *listen\.owner *= *.*,listen.owner = www,g' \
         -e 's, *listen\.group *= *.*,listen.group = www,g' \
-        etc/php/5.6/fpm/pool.d/www.conf \
+        etc/php/7.3/fpm/pool.d/www.conf \
  && sed -i -r \
         's,[ ;]*systemd_interval *= *.*,systemd_interval = 0,g' \
-        etc/php/5.6/fpm/php-fpm.conf \
+        etc/php/7.3/fpm/php-fpm.conf \
  && sed -i -r \
         -e 's,[ ;]*openssl[.]cafile *= *.*,openssl.cafile = /etc/ssl/certs/ca-certificates.crt,g' \
         -e 's,[ ;]*openssl[.]capath *= *.*,openssl.capath = /usr/share/ca-certificates/mozilla,g' \
-        etc/php/5.6/fpm/php.ini \
+        etc/php/7.3/fpm/php.ini \
  && sed -i -r \
         -e 's,[ ;]*openssl[.]cafile *= *.*,openssl.cafile = /etc/ssl/certs/ca-certificates.crt,g' \
         -e 's,[ ;]*openssl[.]capath *= *.*,openssl.capath = /usr/share/ca-certificates/mozilla,g' \
-        etc/php/5.6/cli/php.ini \
- && for file in etc/php/5.6/mods-available/*.ini; do \
+        etc/php/7.3/cli/php.ini \
+ && for file in etc/php/7.3/mods-available/*.ini; do \
         priority=$(grep -E " *; *priority=" ${file} | sed -r "s/ *; *priority *= *([0-9]+.*)/\1/g"); \
         if [ -z "${priority}" ]; then priority=20; fi; \
-        ln -s "../../mods-available/$(basename ${file})" etc/php/5.6/cli/conf.d/${priority}-$(basename ${file}); \
-        ln -s "../../mods-available/$(basename ${file})" etc/php/5.6/fpm/conf.d/${priority}-$(basename ${file}); \
+        ln -s "../../mods-available/$(basename ${file})" etc/php/7.3/cli/conf.d/${priority}-$(basename ${file}); \
+        ln -s "../../mods-available/$(basename ${file})" etc/php/7.3/fpm/conf.d/${priority}-$(basename ${file}); \
     done \
  && find \
         etc/firebird/3.0/firebird.conf \
