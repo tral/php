@@ -22,6 +22,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
  && apt-get install -y \
          python3-software-properties \
          software-properties-common \
+         git \
          apt-utils
 
 RUN export DEBIAN_FRONTEND=noninteractive \
